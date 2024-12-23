@@ -13,6 +13,15 @@
       color: #fff;
     }
 
+    /* Gradient Text for Brand Name and Product Names */
+    .logo,
+    .product-card h4 {
+      background: linear-gradient(to left, purple, maroon);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+
     /* Navbar */
     .navbar {
       display: flex;
@@ -26,13 +35,13 @@
     .navbar .logo {
       font-size: 1.5rem;
       font-weight: bold;
-      color: #A6E3A1;
     }
 
     .navbar .menu-icon,
     .navbar .search-icon {
       font-size: 1.5rem;
       cursor: pointer;
+      color: #fff;
     }
 
     /* Section Title */
@@ -62,14 +71,14 @@
     }
 
     .product-card {
-      flex: 0 0 calc(17.5% - 15px); /* Half the original size */
-      max-width: calc(17.5% - 15px); /* Consistent width */
+      flex: 0 0 calc(17.5% - 15px); 
+      max-width: calc(17.5% - 15px); 
       background: #222;
       border-radius: 8px;
-      padding: 4px; /* Reduced padding */
+      padding: 4px;
       text-align: center;
       scroll-snap-align: start;
-      aspect-ratio: 5 / 1; /* Width slightly larger than height */
+      aspect-ratio: 5 / 1; 
     }
 
     .product-card img {
@@ -81,17 +90,17 @@
 
     .product-card h4 {
       margin: 8px 0 4px;
-      font-size: 0.7rem; /* Smaller font size */
+      font-size: 0.7rem;
     }
 
     .product-card p {
-      font-size: 0.6rem; /* Smaller font size */
+      font-size: 0.6rem;
       color: #aaa;
     }
 
     .product-card .price {
       margin-top: 4px;
-      font-size: 0.7rem; /* Adjust font size */
+      font-size: 0.7rem;
       font-weight: bold;
       color: #A6E3A1;
     }
@@ -101,7 +110,7 @@
       background: #4CAF50;
       color: #fff;
       border: none;
-      padding: 4px 8px; /* Smaller button padding */
+      padding: 4px 8px;
       font-size: 0.6rem;
       border-radius: 5px;
       cursor: pointer;
@@ -148,7 +157,7 @@
     /* Media Query for Responsiveness */
     @media (max-width: 768px) {
       .product-card {
-        flex: 0 0 calc(40% - 15px); /* Larger cards for smaller screens */
+        flex: 0 0 calc(40% - 15px); 
         max-width: calc(40% - 15px);
         aspect-ratio: 5 / 4;
       }

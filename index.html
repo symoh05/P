@@ -62,44 +62,47 @@
     }
 
     .product-card {
-      flex: 0 0 calc(35% - 15px); /* Smaller width per card */
-      max-width: calc(35% - 15px); /* Adjust max-width accordingly */
+      flex: 0 0 calc(17.5% - 15px); /* Half the original size */
+      max-width: calc(17.5% - 15px); /* Consistent width */
       background: #222;
       border-radius: 8px;
-      padding: 8px; /* Reduced padding */
+      padding: 4px; /* Reduced padding */
       text-align: center;
       scroll-snap-align: start;
+      aspect-ratio: 5 / 1; /* Width slightly larger than height */
     }
 
     .product-card img {
       width: 100%;
+      height: 100%;
+      object-fit: cover;
       border-radius: 8px;
     }
 
     .product-card h4 {
       margin: 8px 0 4px;
-      font-size: 0.8rem; /* Smaller font size */
+      font-size: 0.7rem; /* Smaller font size */
     }
 
     .product-card p {
-      font-size: 0.7rem; /* Smaller font size */
+      font-size: 0.6rem; /* Smaller font size */
       color: #aaa;
     }
 
     .product-card .price {
       margin-top: 4px;
-      font-size: 0.8rem; /* Adjust font size */
+      font-size: 0.7rem; /* Adjust font size */
       font-weight: bold;
       color: #A6E3A1;
     }
 
     .product-card .add-to-cart {
-      margin-top: 8px;
+      margin-top: 6px;
       background: #4CAF50;
       color: #fff;
       border: none;
-      padding: 6px 10px; /* Smaller button padding */
-      font-size: 0.7rem;
+      padding: 4px 8px; /* Smaller button padding */
+      font-size: 0.6rem;
       border-radius: 5px;
       cursor: pointer;
     }
@@ -145,8 +148,9 @@
     /* Media Query for Responsiveness */
     @media (max-width: 768px) {
       .product-card {
-        flex: 0 0 calc(60% - 15px); /* Adjust for smaller screens */
-        max-width: calc(60% - 15px);
+        flex: 0 0 calc(40% - 15px); /* Larger cards for smaller screens */
+        max-width: calc(40% - 15px);
+        aspect-ratio: 5 / 4;
       }
     }
   </style>

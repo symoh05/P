@@ -1,0 +1,215 @@
+<?php
+// Include the database connection
+include('db.php');
+
+// Query to fetch all products from the database
+$sql = "SELECT * FROM products";
+$result = $connection->query($sql);
+
+// Handle search query
+$searchResults = [];
+if (isset($_GET['search'])) {
+    $search = $connection->real_escape_string($_GET['search']);
+    $query = "SELECT * FROM products WHERE name LIKE '%$search%'";
+    $searchResult = $connection->query($query);
+
+    while ($row = $searchResult->fetch_assoc()) {
+        $searchResults[] = $row;
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sneak&Chic - Clothing, Shoes, Watches and More</title>
+    <link rel="stylesheet" href="sty.css"> <!-- Link to your CSS file -->
+    <script src="script.js" defer></script>
+    <style>
+        /* Existing CSS styles remain unchanged */
+
+        /* Search Bar */
+        .search-bar {
+            position: relative;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .search-bar input {
+            padding: 10px;
+            width: 60%;
+            max-width: 400px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .search-bar button {
+            padding: 10px 15px;
+            background-color: #4ea8de;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .search-suggestions {
+            position: absolute;
+            background: white;
+            border: 1px solid #ccc;
+            width: 60%;
+            max-width: 400px;
+            z-index: 1000;
+            display: none;
+            overflow: auto;
+            max-height: 150px;
+        }
+
+        .search-suggestions div {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .search-suggestions div:hover {
+            background: #f0f0f0;
+        }
+
+        /* Slider */
+        .slider {
+            overflow: hidden;
+            width: 100%;
+            max-height: 300px;
+            position: relative;
+        }
+
+        .slides {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .slides img {
+            width: 100%;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="ham-menu" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </div>
+        <h1>Sneak&Chic</h1>
+        <div class="off-screen-menu" id="menu">
+            <ul>
+                <li><a href="index.php">Home</a></li>
+                <li><a href="cart.php">Cart</a></li>
+                <li><a href="checkout.php">Checkout</a></li>
+                <li><a href="login.php">Admin Dashboard</a></li>
+                <li><a href="vf.html">Home</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Banner Section -->
+    <section class="banner">
+        <h2>Step Up Your Game With Sneak&Chic</h2>
+        <p>Stay Sneaky. Stay Chic</p>
+    </section>
+
+    <!-- Search Section -->
+    <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Search for products...">
+        <button id="search-btn">Search</button>
+        <div id="search-suggestions" class="search-suggestions"></div>
+    </div>
+
+    <!-- Slider Section -->
+    <section class="slider">
+        <div class="slides">
+            <img src="banner1.jpg" alt="Banner 1">
+            <img src="banner2.jpg" alt="Banner 2">
+            <img src="banner3.jpg" alt="Banner 3">
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <div class="categories">
+        <a href="category.php?category=menwear">Men's Wear</a>
+        <a href="category.php?category=womenwear">Women's Wear</a>
+        <a href="category.php?category=shoes">Shoes</a>
+        <a href="category.php?category=watches">Watches</a>
+        <a href="category.php?category=accessories">Accessories</a>
+    </div>
+
+    <!-- Product Section -->
+    <div class="product-container">
+        <?php
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                echo '<div class="product">';
+                $imagePath = 'uploads/' . htmlspecialchars($row['image']);
+                echo '<a href="product.php?id=' . $row['id'] . '"><img src="' . $imagePath . '" alt="' . htmlspecialchars($row['name']) . '" class="product-image"></a>';
+                $priceKsh = number_format($row['price_ksh'], 2);
+                echo '<h3>' . htmlspecialchars($row['name']) . '</h3>';
+                echo '<p><strong>Price:</strong> Ksh ' . $priceKsh . '</p>';
+                echo '<button class="add-to-cart">Add to Cart</button>';
+                echo '</div>';
+            }
+        } else {
+            echo '<p>No products available.</p>';
+        }
+        ?>
+    </div>
+
+</body>
+</html>
+
+<script>
+    // Search Suggestions
+    const searchInput = document.getElementById('search-input');
+    const searchSuggestions = document.getElementById('search-suggestions');
+
+    searchInput.addEventListener('input', () => {
+        const query = searchInput.value;
+        if (query.length > 2) {
+            fetch(`index.php?search=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    searchSuggestions.innerHTML = '';
+                    data.forEach(item => {
+                        const div = document.createElement('div');
+                        div.textContent = item.name;
+                        div.onclick = () => {
+                            searchInput.value = item.name;
+                            searchSuggestions.style.display = 'none';
+                        };
+                        searchSuggestions.appendChild(div);
+                    });
+                    searchSuggestions.style.display = 'block';
+                });
+        } else {
+            searchSuggestions.style.display = 'none';
+        }
+    });
+
+    // Slider
+    let slideIndex = 0;
+    const slides = document.querySelector('.slides');
+    const slideImages = document.querySelectorAll('.slides img');
+    const totalSlides = slideImages.length;
+
+    function showSlides() {
+        slideIndex = (slideIndex + 1) % totalSlides;
+        slides.style.transform = `translateX(-${slideIndex * 100}%)`;
+    }
+
+    setInterval(showSlides, 3000);
+</script>
+
+<?php
+// Close the database connection
+$connection->close();
+?>
